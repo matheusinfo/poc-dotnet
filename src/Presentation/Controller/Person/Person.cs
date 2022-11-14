@@ -5,7 +5,7 @@ namespace csharp_crud.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class PersonController: ControllerBase
+public class PersonController : ControllerBase
 {
     private readonly LoadPersonsRepository _loadPersonsRepository;
     private readonly LoadPersonByIdRepository _loadPersonByIdRepository;
@@ -31,8 +31,15 @@ public class PersonController: ControllerBase
     [HttpGet]
     public async Task<IActionResult> LoadPersons()
     {
-        var persons = await _loadPersonsRepository.loadPersons();
-        return persons.Any() ? Ok(persons) : NoContent();
+        try
+        {
+            var persons = await _loadPersonsRepository.loadPersons();
+            return persons.Any() ? Ok(persons) : NoContent();
+        }
+        catch (Exception e)
+        {
+            return NotFound(e.Message);
+        }
     }
 
     [HttpGet("{id}")]
