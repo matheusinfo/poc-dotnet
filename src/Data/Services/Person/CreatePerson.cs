@@ -12,7 +12,7 @@ public class CreatePersonService : ICreatePerson {
         _createPersonRepository = createPersonRepository;
     }
 
-    public async Task<PersonResponse> createPerson(PersonRequest personRequest) {
-        return await _createPersonRepository.createPerson(personRequest);
+    public void createPerson(PersonRequest personRequest) {
+        _createPersonRepository.createPerson(personRequest);
     }
 }

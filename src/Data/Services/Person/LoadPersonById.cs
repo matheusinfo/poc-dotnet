@@ -12,8 +12,8 @@ public class LoadPersonByIdService : ILoadPersonById {
         _loadPersonByIdRepository = loadPersonByIdRepository;
     }
 
-    public async Task<PersonResponse> loadPersonById(int id) {
-        var person = await _loadPersonByIdRepository.loadPersonById(id);
+    public PersonResponse loadPersonById(int id) {
+        var person = _loadPersonByIdRepository.loadPersonById(id);
 
         if (person == null) {
             throw new Exception("Person not found");

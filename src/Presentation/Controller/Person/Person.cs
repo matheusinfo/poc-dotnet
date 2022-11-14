@@ -30,25 +30,25 @@ public class PersonController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<IActionResult> LoadPersons()
+    public IActionResult LoadPersons()
     {
         try
         {
-            var persons = await _loadPersons.loadPersons();
-            return persons.Any() ? Ok(persons) : NoContent();
+            var persons = _loadPersons.loadPersons();
+            return Ok(persons);
         }
         catch (Exception e)
         {
-            return NotFound(e.Message);
+            return BadRequest(e.Message);
         }
     }
 
     [HttpGet("{id}")]
-    public async Task<IActionResult> LoadPersonById(int id)
+    public IActionResult LoadPersonById(int id)
     {
         try
         {
-            var person = await _loadPersonById.loadPersonById(id);
+            var person = _loadPersonById.loadPersonById(id);
             return Ok(person);
         }
         catch (Exception e)
@@ -58,18 +58,18 @@ public class PersonController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<IActionResult> CreatePerson([FromBody] PersonRequest personRequest)
+    public IActionResult CreatePerson([FromBody] PersonRequest personRequest)
     {
-        var person = await _createPerson.createPerson(personRequest);
-        return CreatedAtAction(nameof(LoadPersonById), new { id = person.id }, person);
+        _createPerson.createPerson(personRequest);
+        return NoContent();
     }
 
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdatePerson(int id, [FromBody] PersonRequest personRequest)
+    public IActionResult UpdatePerson(int id, [FromBody] PersonRequest personRequest)
     {
         try
         {
-            var person = await _updatePerson.updatePerson(id, personRequest);
+            var person = _updatePerson.updatePerson(id, personRequest);
             return Ok(person);
         }
         catch (Exception e)
@@ -79,11 +79,11 @@ public class PersonController : ControllerBase
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeletePerson(int id)
+    public IActionResult DeletePerson(int id)
     {
         try
         {
-            await _deletePerson.deletePerson(id);
+            _deletePerson.deletePerson(id);
             return NoContent();
         }
         catch (Exception e)

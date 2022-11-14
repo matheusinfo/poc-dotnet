@@ -16,13 +16,13 @@ public class UpdatePersonService : IUpdatePerson {
         _updatePersonRepository = updatePersonRepository;
     }
 
-    public async Task<PersonResponse> updatePerson(int id, PersonRequest personRequest) {
-        var person = await _loadPersonByIdRepository.loadPersonById(id);
+    public PersonResponse updatePerson(int id, PersonRequest personRequest) {
+        var person = _loadPersonByIdRepository.loadPersonById(id);
 
         if (person == null) {
             throw new Exception("Person not found");
         }
 
-        return await _updatePersonRepository.updatePerson(id, personRequest);
+        return _updatePersonRepository.updatePerson(id, personRequest);
     }
 }

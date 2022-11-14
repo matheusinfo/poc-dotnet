@@ -12,7 +12,7 @@ public class LoadPersonsService : ILoadPersons {
         _loadPersonsRepository = loadPersonsRepository;
     }
 
-    public async Task<List<PersonResponse>> loadPersons() {
-        return await _loadPersonsRepository.loadPersons();
+    public List<PersonResponse> loadPersons() {
+        return _loadPersonsRepository.loadPersons();
     }
 }

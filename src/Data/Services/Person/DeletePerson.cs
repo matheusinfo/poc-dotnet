@@ -14,13 +14,13 @@ public class DeletePersonService : IDeletePerson {
         _deletePersonRepository = deletePersonRepository;
     }
 
-    public async Task<bool> deletePerson(int id) {
-        var person = await _loadPersonByIdRepository.loadPersonById(id);
+    public void deletePerson(int id) {
+        var person = _loadPersonByIdRepository.loadPersonById(id);
 
         if (person == null) {
-            return false;
+            throw new Exception("Person not found");
         }
 
-        return await _deletePersonRepository.deletePerson(person);
+        _deletePersonRepository.deletePerson(person);
     }
 }
