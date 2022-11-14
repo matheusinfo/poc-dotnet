@@ -3,11 +3,11 @@ using csharp_crud.Models;
 namespace csharp_crud.Repository;
 
 public class PersonRepository : 
-    CreatePersonRepository, 
-    DeletePersonRepository,
-    LoadPersonByIdRepository,
-    LoadPersonsRepository,
-    UpdatePersonRepository 
+    ICreatePersonRepository, 
+    IDeletePersonRepository,
+    ILoadPersonByIdRepository,
+    ILoadPersonsRepository,
+    IUpdatePersonRepository 
 {
     private readonly List<PersonResponse> _persons;
 

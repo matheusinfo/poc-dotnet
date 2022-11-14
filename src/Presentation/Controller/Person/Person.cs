@@ -1,5 +1,6 @@
 using csharp_crud.Models;
 using Microsoft.AspNetCore.Mvc;
+using csharp_crud.src.Data.Usecases.Person;
 
 namespace csharp_crud.Controllers;
 
@@ -7,25 +8,25 @@ namespace csharp_crud.Controllers;
 [Route("api/[controller]")]
 public class PersonController : ControllerBase
 {
-    private readonly LoadPersonsRepository _loadPersonsRepository;
-    private readonly LoadPersonByIdRepository _loadPersonByIdRepository;
-    private readonly CreatePersonRepository _createPersonRepository;
-    private readonly UpdatePersonRepository _updatePersonRepository;
-    private readonly DeletePersonRepository _deletePersonRepository;
+    private readonly ILoadPersons _loadPersons;
+    private readonly ILoadPersonById _loadPersonById;
+    private readonly ICreatePerson _createPerson;
+    private readonly IUpdatePerson _updatePerson;
+    private readonly IDeletePerson _deletePerson;
 
     public PersonController(
-        LoadPersonsRepository loadPersonsRepository,
-        LoadPersonByIdRepository loadPersonByIdRepository,
-        CreatePersonRepository createPersonRepository,
-        UpdatePersonRepository updatePersonRepository,
-        DeletePersonRepository deletePersonRepository
+        ILoadPersons loadPersons,
+        ILoadPersonById loadPersonById,
+        ICreatePerson createPerson,
+        IUpdatePerson updatePerson,
+        IDeletePerson deletePerson
     )
     {
-        _loadPersonsRepository = loadPersonsRepository;
-        _loadPersonByIdRepository = loadPersonByIdRepository;
-        _createPersonRepository = createPersonRepository;
-        _updatePersonRepository = updatePersonRepository;
-        _deletePersonRepository = deletePersonRepository;
+        _loadPersons = loadPersons;
+        _loadPersonById = loadPersonById;
+        _createPerson = createPerson;
+        _updatePerson = updatePerson;
+        _deletePerson = deletePerson;
     }
 
     [HttpGet]
@@ -33,7 +34,7 @@ public class PersonController : ControllerBase
     {
         try
         {
-            var persons = await _loadPersonsRepository.loadPersons();
+            var persons = await _loadPersons.loadPersons();
             return persons.Any() ? Ok(persons) : NoContent();
         }
         catch (Exception e)
@@ -47,7 +48,7 @@ public class PersonController : ControllerBase
     {
         try
         {
-            var person = await _loadPersonByIdRepository.loadPersonById(id);
+            var person = await _loadPersonById.loadPersonById(id);
             return Ok(person);
         }
         catch (Exception e)
@@ -59,7 +60,7 @@ public class PersonController : ControllerBase
     [HttpPost]
     public async Task<IActionResult> CreatePerson([FromBody] PersonRequest personRequest)
     {
-        var person = await _createPersonRepository.createPerson(personRequest);
+        var person = await _createPerson.createPerson(personRequest);
         return CreatedAtAction(nameof(LoadPersonById), new { id = person.id }, person);
     }
 
@@ -68,7 +69,7 @@ public class PersonController : ControllerBase
     {
         try
         {
-            var person = await _updatePersonRepository.updatePerson(id, personRequest);
+            var person = await _updatePerson.updatePerson(id, personRequest);
             return Ok(person);
         }
         catch (Exception e)
@@ -82,7 +83,7 @@ public class PersonController : ControllerBase
     {
         try
         {
-            await _deletePersonRepository.deletePerson(id);
+            await _deletePerson.deletePerson(id);
             return NoContent();
         }
         catch (Exception e)

@@ -1,5 +1,7 @@
 using csharp_crud.Models;
 
-public interface UpdatePersonRepository { 
+namespace csharp_crud.src.Data.Usecases.Person;
+
+public interface IUpdatePerson {
     Task<PersonResponse> updatePerson(int id, PersonRequest personRequest);
 }

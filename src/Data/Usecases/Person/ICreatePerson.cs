@@ -1,5 +1,7 @@
 using csharp_crud.Models;
 
-public interface CreatePersonRepository { 
+namespace csharp_crud.src.Data.Usecases.Person;
+
+public interface ICreatePerson {
     Task<PersonResponse> createPerson(PersonRequest personRequest);
 }
