@@ -2,60 +2,49 @@ using csharp_crud.Models;
 
 namespace csharp_crud.Repository;
 
-public class PersonRepository : 
-    ICreatePersonRepository, 
-    IDeletePersonRepository,
-    ILoadPersonByIdRepository,
-    ILoadPersonsRepository,
-    IUpdatePersonRepository 
+public class PersonRepository
+    : ICreatePersonRepository,
+        IDeletePersonRepository,
+        ILoadPersonByIdRepository,
+        ILoadPersonsRepository,
+        IUpdatePersonRepository
 {
-    private readonly List<PersonResponse> _persons;
+    private static readonly List<PersonResponse> _persons = new List<PersonResponse>();
 
-    public PersonRepository()
+    public Task<PersonResponse> createPerson(PersonRequest personRequest)
     {
-        _persons = new List<PersonResponse>();  
-    }
-
-    public Task<PersonResponse> createPerson(PersonRequest personRequest) 
-    {
-        var person = new PersonResponse { id = this._persons.Count + 1, name = personRequest.name, age = personRequest.age };
+        var person = new PersonResponse
+        {
+            id = _persons.Count + 1,
+            name = personRequest.name,
+            age = personRequest.age
+        };
         _persons.Add(person);
         return Task.FromResult(person);
     }
 
-    public Task<bool> deletePerson(int id)
+    public Task<bool> deletePerson(PersonResponse person)
     {
-        var person = _persons.FirstOrDefault(person => person.id == id);
-        
-        if (person == null) {
-            return Task.FromResult(false);
-        }
-
         _persons.Remove(person);
         return Task.FromResult(true);
     }
 
-    public Task<PersonResponse> loadPersonById(int id) 
+    public Task<PersonResponse?> loadPersonById(int id)
     {
         var person = _persons.FirstOrDefault(person => person.id == id);
-        
-        if (person == null) {
-            throw new Exception("Person not found");
-        }
-
         return Task.FromResult(person);
     }
 
     public Task<List<PersonResponse>> loadPersons()
     {
-        return Task.FromResult(this._persons);
+        return Task.FromResult(_persons);
     }
 
     public Task<PersonResponse> updatePerson(int id, PersonRequest personRequest)
     {
         var person = _persons.FirstOrDefault(person => person.id == id);
-        
-        if (person == null) {
+
+        if(person == null){
             throw new Exception("Person not found");
         }
 

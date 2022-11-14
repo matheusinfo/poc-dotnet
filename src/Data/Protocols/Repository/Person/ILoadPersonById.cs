@@ -1,5 +1,5 @@
 using csharp_crud.Models;
 
 public interface ILoadPersonByIdRepository { 
-    Task<PersonResponse> loadPersonById(int id);
+    Task<PersonResponse?> loadPersonById(int id);
 }

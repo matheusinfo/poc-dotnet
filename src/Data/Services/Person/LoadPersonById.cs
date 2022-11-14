@@ -13,6 +13,12 @@ public class LoadPersonByIdService : ILoadPersonById {
     }
 
     public async Task<PersonResponse> loadPersonById(int id) {
-        return await _loadPersonByIdRepository.loadPersonById(id);
+        var person = await _loadPersonByIdRepository.loadPersonById(id);
+
+        if (person == null) {
+            throw new Exception("Person not found");
+        }
+
+        return person;
     }
 }
